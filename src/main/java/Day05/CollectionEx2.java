@@ -1,6 +1,7 @@
 package Day05;
 
 import netscape.javascript.JSObject;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Iterator;
@@ -19,13 +20,92 @@ public class CollectionEx2 {
 
         //   data1, data2, data3
         // ^  <- Iterator는 맨 처음의 첫 번째 데이터 전을 가리킨다.
+        //   |data1|data2|data3
+        //           ^   <- Iterator는 맨 처음에 첫 번째 데이터 전을 가리키고 있다.
 
-        while (i.hasNext()) {       // hasNext()는 다음 값이 있으면 true 반환, 없으면 false 반환
+        while (i.hasNext()) {
+            // hasNext()는 다음 값이 있으면 true 반환, 없으면 false 반환
+            // hasNext() next()를 했을 때 데이터가 있다 없다를 반환
+
             String key = i.next().toString();
             System.out.println(key);
-            jsonObject.get(key);
         }
+        /*
+            metadata
+            sub_banner_height
+            selected_products
+            test_name
+            concierge
+        */
 
+        System.out.println();
+
+        String json2 = jsonObject.get("selected_products").toString();
+        JSONArray jsonArray = new JSONArray(json2);
+
+        int originalPrice = 0;
+        int sellingPrice = 0;
+        int gap  = 0;
+        int dcRate = 0;
+
+        for (int j = 0; j < jsonArray.length(); j++) {
+            String json3 = jsonArray.get(j).toString();
+            JSONObject jsonObject2 = new JSONObject(json3);
+
+            System.out.print("상품의 제조사는 ");
+            System.out.print(jsonObject2.get("brand_name").toString());
+            System.out.println("입니다.");
+
+            System.out.print("상품의 이름은 ");
+            System.out.print(jsonObject2.get("name").toString());
+            System.out.println(" 입니다.");
+
+            System.out.print("상품의 원가는 ");
+            System.out.print(jsonObject2.get("original_price").toString());
+            System.out.println("원입니다.");
+
+            System.out.print("상품의 판매가는 ");
+            System.out.print(jsonObject2.get("selling_price").toString());
+            System.out.println("원입니다.");
+
+
+            originalPrice = (int) (jsonObject2.get("original_price"));
+            sellingPrice = (int) (jsonObject2.get("selling_price"));
+            gap = originalPrice - sellingPrice;
+            dcRate = (gap * 100) / originalPrice;
+
+            System.out.print("상품의 할인율은 약 ");
+            System.out.print(dcRate);
+            System.out.println("%입니다.");
+
+            System.out.print("상품의 평점은 ");
+            System.out.print(jsonObject2.get("review_avg").toString());
+            System.out.println("점입니다.");
+
+            System.out.print("상품의 리뷰 개수는 ");
+            System.out.print(jsonObject2.get("review_count").toString());
+            System.out.println("개입니다.");
+            System.out.println();
+        }
+        /*
+            상품의 제조사는 심플먼트입니다.
+            상품의 이름은 [오늘만25,920원] 이지케어 워셔블 슬러브 러그 카페트 입니다.
+            상품의 원가는 37900원입니다.
+            상품의 판매가는 28800원입니다.
+            상품의 할인율은 약 24%입니다.
+            상품의 평점은 4.68점입니다.
+            상품의 리뷰 개수는 16259개입니다.
+
+            상품의 제조사는 마틸라입니다.
+            상품의 이름은 [7%쿠폰]NEW 보송따뜻 무브 먼지없는 세미 극세사 차렵이불세트 18colors 입니다.
+            상품의 원가는 88200원입니다.
+            상품의 판매가는 44900원입니다.
+            상품의 할인율은 약 49%입니다.
+            상품의 평점은 4.63점입니다.
+            상품의 리뷰 개수는 15449개입니다.
+
+            ...
+        */
 
     }
 }
